@@ -254,13 +254,24 @@
     margin: 8px auto 0;
     border-radius: 4px;
   }
+ .header-image {
+    width: 245px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    display: block;
+    margin: auto;
+}
 </style>
 </head>
-<body><div class="watermark">DEMO MOCKUP</div>
-  <div class="demo-banner">DEMO／模擬頁面 — 非官方、不可作為真實成績紀錄</div>
 
   <header>
-    <div class="image-slot header-image-slot">上方標題圖片位置</div>
+    <img src="header.png" class="header-image" alt="">
     <div class="top-links">
       <span>免費試用</span>
       <span>課程購買</span>
@@ -287,8 +298,8 @@
       <div class="panel-title">成績單</div>
       <div class="score-content">
         <div>
-          <div class="image-slot profile-image-slot">中間圖片位置</div>
-          <div class="image-slot name-image-slot">學生名稱圖片位置</div>
+          <img src="profile.png" class="profile-image" alt="">
+          <p>林炫銓</p>
         </div>
 
         <div class="meta">
@@ -298,7 +309,8 @@
           <div><b>答對答數：</b><span class="blue">38</span></div>
           <div><b>作答時間：</b><span class="blue">22:45</span></div>
           <div><b>開始時間：</b>2026/08/14 下午 16:48:58</div>
-          <div><b>交卷時間：</b>2026/08/14 下午 17:12:01</div>
+      
+         <div><b>交卷時間：</b>2026/08/14 下午 17:12:01</div>
         </div>
 
         <div class="score-box">
