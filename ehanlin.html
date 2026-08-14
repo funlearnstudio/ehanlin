@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>成績單</title>
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC",
+                 "PingFang TC", "Microsoft JhengHei", Arial, sans-serif;
+    color: #24435f;
+    background:
+      linear-gradient(rgba(255,255,255,.86), rgba(255,255,255,.86)),
+      radial-gradient(circle at 30px 30px, #d9e0e5 1px, transparent 1.5px);
+    background-size: auto, 42px 42px;
+  }
+
+  .demo-banner {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    text-align: center;
+    padding: 8px 12px;
+    background: #ffe7a6;
+    color: #5d4700;
+    font-weight: 700;
+    letter-spacing: .5px;
+    border-bottom: 1px solid #e6c96b;
+  }
+
+  header {
+    height: 70px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 34px;
+    border-bottom: 1px solid #e6ebef;
+  }
+  .brand {
+    font-size: 29px;
+    font-weight: 800;
+    color: #1d73b7;
+  }
+  .brand small {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6f8ba1;
+    margin-top: -2px;
+  }
+  .top-links {
+    display: flex;
+    gap: 28px;
+    font-size: 18px;
+    color: #1872b7;
+    font-weight: 600;
+  }
+
+  main {
+    width: min(1130px, calc(100% - 36px));
+    margin: 14px auto 70px;
+  }
+
+  .back {
+    color: #1598cb;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr) 64px;
+    background: #08a0cc;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 3px rgba(0,0,0,.18);
+    margin-bottom: 30px;
+  }
+  .nav div {
+    padding: 16px 8px;
+    color: #fff;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    border-right: 1px dashed rgba(255,255,255,.75);
+  }
+  .nav div:last-child { border-right: 0; }
+
+  .panel {
+    background: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.16);
+    margin-bottom: 30px;
+  }
+  .panel-title {
+    background: #0e2d47;
+    color: #fff;
+    font-size: 25px;
+    font-weight: 700;
+    padding: 15px 28px;
+  }
+
+  .score-content {
+    padding: 34px 40px 26px;
+    display: grid;
+    grid-template-columns: 230px 1fr 300px;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .avatar {
+    width: 145px;
+    height: 145px;
+    margin: auto;
+    border-radius: 18px;
+    background:
+      linear-gradient(135deg, #ffd32a, #ff8a00);
+    display: grid;
+    place-items: center;
+    font-size: 64px;
+    border: 8px solid #fff;
+    outline: 1px solid #efefef;
+  }
+  .student-name {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 20px;
+    color: #2d4356;
+  }
+
+  .meta {
+    font-size: 17px;
+    line-height: 1.72;
+  }
+  .meta b { color: #243a4e; }
+  .meta .blue { color: #2583c6; }
+
+  .score-box {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 14px 20px;
+  }
+  .score-label {
+    font-size: 17px;
+    font-weight: 700;
+    text-align: right;
+  }
+  .big {
+    font-size: 70px;
+    line-height: .9;
+    font-weight: 300;
+    color: #2b4963;
+  }
+  .unit {
+    font-size: 26px;
+    margin-left: 7px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 14px 28px 10px;
+  }
+  .tab {
+    padding: 11px 18px;
+    background: #eef2f4;
+    border-radius: 4px;
+    color: #667d8d;
+    font-weight: 700;
+  }
+  .tab.active {
+    background: #0aa3cc;
+    color: #fff;
+  }
+
+  table {
+    width: calc(100% - 56px);
+    margin: 0 28px 0;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+  th, td {
+    padding: 13px 10px;
+    text-align: center;
+    border-bottom: 1px dashed #dce2e6;
+  }
+  th { color: #4b6272; }
+  .wrong {
+    margin: 0 28px 24px;
+    background: #ff3f3f;
+    color: #fff;
+    padding: 12px 18px;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  @media (max-width: 860px) {
+    .top-links { display: none; }
+    .nav { grid-template-columns: repeat(3, 1fr); }
+    .nav div:last-child { display: none; }
+    .score-content {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .score-box { justify-content: center; }
+    .score-label { text-align: left; }
+  }
+
+  .watermark {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 40;
+    display: grid;
+    place-items: center;
+    font-size: 72px;
+    font-weight: 800;
+    color: rgba(120,120,120,.08);
+    transform: rotate(-18deg);
+    letter-spacing: 8px;
+    user-select: none;
+  }
+
+  .image-slot {
+    border: 2px dashed #aebdca;
+    background: #f7f9fb;
+    color: #7b8d9b;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .header-image-slot {
+    width: 245px;
+    height: 48px;
+    border-radius: 4px;
+  }
+  .profile-image-slot {
+    width: 150px;
+    height: 150px;
+    margin: auto;
+    border-radius: 6px;
+  }
+  .name-image-slot {
+    width: 150px;
+    height: 34px;
+    margin: 8px auto 0;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body><div class="watermark">DEMO MOCKUP</div>
+  <div class="demo-banner">DEMO／模擬頁面 — 非官方、不可作為真實成績紀錄</div>
+
+  <header>
+    <div class="image-slot header-image-slot">上方標題圖片位置</div>
+    <div class="top-links">
+      <span>免費試用</span>
+      <span>課程購買</span>
+      <span>學習專區</span>
+      <span>活動專區</span>
+      <span>訊息</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="back">⌂ 回到我的課程</div>
+
+    <div class="nav">
+      <div>▣ 課程內容</div>
+      <div>▣ 段考複習</div>
+      <div>▣ 考卷專區</div>
+      <div>✎ 自我評量</div>
+      <div>◇ 個人題庫</div>
+      <div>☏ 解題討論</div>
+      <div>⚙</div>
+    </div>
+
+    <section class="panel">
+      <div class="panel-title">成績單</div>
+      <div class="score-content">
+        <div>
+          <div class="image-slot profile-image-slot">中間圖片位置</div>
+          <div class="image-slot name-image-slot">學生名稱圖片位置</div>
+        </div>
+
+        <div class="meta">
+          <div><b>考試範圍：</b>1–3_示範單元</div>
+          <div><b>考卷難度：</b>中偏易</div>
+          <div><b>考卷答數：</b><span class="blue">40</span></div>
+          <div><b>答對答數：</b><span class="blue">38</span></div>
+          <div><b>作答時間：</b><span class="blue">22:45</span></div>
+          <div><b>開始時間：</b>2026/08/14 下午 16:48:58</div>
+          <div><b>交卷時間：</b>2026/08/14 下午 17:12:01</div>
+        </div>
+
+        <div class="score-box">
+          <div class="score-label">待複習：</div>
+          <div><span class="big">0</span><span class="unit">題</span></div>
+          <div class="score-label">我的分數：</div>
+          <div><span class="big">95</span><span class="unit">分</span></div>
+        </div>
+      </div>
+    </section>
+
+    
+<section class="panel">
+  <div class="panel-title">▧ 答題狀態</div>
+
+  <div class="tabs">
+    <div class="tab">↗ 全部試題</div>
+    <div class="tab">⊗ 待複習</div>
+    <div class="tab">⊗ 答錯題</div>
+    <div class="tab active" style="background:#ff6433;">⚠ 待檢查</div>
+    <div style="margin-left:auto;padding:11px 18px;background:#eef2f4;border-radius:4px;color:#667d8d;font-weight:700;">
+      ◀ 字字字 ▶
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>答題狀態</th>
+        <th>題號</th>
+        <th>難易度</th>
+        <th>答題時間</th>
+        <th>平均時間</th>
+        <th>知識概念</th>
+      </tr>
+    </thead>
+  </table>
+
+  
+</section>
+
+  </main>
+</body>
+</html>
